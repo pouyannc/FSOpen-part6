@@ -4,14 +4,20 @@ import { createAnecdote } from '../requests';
 import NotifContext from './NotificationContext';
 
 const AnecdoteForm = () => {
+  const [notif, notifDispatch] = useContext(NotifContext);
+
   const queryClient = useQueryClient();
   const newAnecMutation = useMutation(createAnecdote, {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['anecdotes'] });
+    },
+    onError: () => {
+      notifDispatch({ type: 'SHOW', payload: `Error: anecdote must be at least 5 characters long` });
+      setTimeout(() => {
+        notifDispatch({ type: 'HIDE' });
+      }, 5000);
     }
   });
-
-  const [notif, notifDispatch] = useContext(NotifContext);
 
   const onCreate = (event) => {
     event.preventDefault()

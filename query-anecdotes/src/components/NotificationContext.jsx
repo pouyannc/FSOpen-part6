@@ -1,7 +1,6 @@
 import { createContext, useReducer } from 'react';
 
 const notifReducer = (state, action) => {
-  console.log(action.type, action.payload)
   switch (action.type) {
     case 'SHOW':
       return {
